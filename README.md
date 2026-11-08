@@ -1,53 +1,54 @@
-# RCNN-RossGirshick
-Material para estudo de RCNN
+# R-CNN — Anotações de estudo
 
-"Rich feature hierarchies for accurate object detection and semantic segmentation" refers to a method or approach in computer vision, where deep neural networks are used to learn multi-scale and hierarchical features from input images. These features allow models to detect objects and understand the semantics (meaning) of different regions within an image more accurately. The concept of hierarchical features is particularly crucial in tasks like **object detection** and **semantic segmentation** as they require both local and global context to perform well.
+Material de estudo organizado por **Rafael Tasinato** sobre detecção de objetos e a evolução da família R-CNN, com base nos artigos originais citados abaixo.
 
-### Key Concepts
+**Status:** documentação conceitual. Este repositório não contém implementação própria, modelos treinados ou resultados experimentais. Os métodos e as contribuições científicas pertencem aos autores das referências.
 
-1. **Feature Hierarchy:**
-   - Feature hierarchies refer to multi-level representations of an image, starting from basic low-level features (such as edges, textures) at the initial layers and progressing to more complex features (such as parts of objects, objects, and scenes) in deeper layers of a neural network.
-   - In a rich feature hierarchy, the network learns increasingly complex representations that can describe objects and their parts in great detail.
+## Objetivos
 
-2. **Object Detection:**
-   - The task of **object detection** involves not only identifying the objects in an image but also localizing them (e.g., drawing bounding boxes around detected objects).
-   - A rich feature hierarchy helps in detecting objects at various scales and contexts, making the detection more robust to variations in size, shape, or orientation of the object.
+- Compreender a combinação de propostas de regiões com redes neurais convolucionais.
+- Diferenciar R-CNN, Fast R-CNN, Faster R-CNN e Mask R-CNN.
+- Distinguir classificação, detecção de objetos e segmentação de instâncias.
 
-3. **Semantic Segmentation:**
-   - **Semantic segmentation** involves classifying each pixel of an image into predefined categories (e.g., "car," "tree," "sky").
-   - Here, rich feature hierarchies allow the model to understand the context of a pixel, which is crucial for accurately segmenting regions that belong to specific classes.
+## Conceitos essenciais
 
-### Rich Feature Hierarchies in Modern Architectures
+- **Classificação:** atribui uma categoria à imagem ou a uma região.
+- **Detecção de objetos:** identifica categorias e localiza objetos por caixas delimitadoras (*bounding boxes*).
+- **Segmentação semântica:** atribui classes aos pixels, sem separar necessariamente objetos da mesma classe.
+- **Segmentação de instâncias:** produz uma máscara para cada objeto individual.
+- **Características convolucionais:** representações aprendidas por uma CNN, utilizadas para reconhecer padrões visuais.
 
-Modern deep learning architectures, such as **Convolutional Neural Networks (CNNs)**, **Fully Convolutional Networks (FCNs)**, **U-Net**, and **Mask R-CNN**, exploit hierarchical features for both detection and segmentation:
+## Evolução da família R-CNN
 
-1. **Convolutional Neural Networks (CNNs):**
-   - CNNs automatically learn hierarchical features through layers of convolutions. The initial layers capture low-level features like edges, and the deeper layers capture complex patterns like textures, object parts, and entire objects.
-   
-2. **Region Proposal Networks (RPN) for Object Detection:**
-   - Networks like **Faster R-CNN** utilize region proposal networks that generate candidate object regions (proposals) from rich hierarchical features. These regions are then passed through a classifier to identify the object and a regressor to localize it.
+| Método | Ideia central | Distinção importante |
+| --- | --- | --- |
+| **R-CNN** | Combina propostas de regiões com características extraídas por uma CNN para detectar objetos. | Processa as regiões individualmente; não utiliza a RPN introduzida posteriormente. |
+| **Fast R-CNN** | Compartilha o cálculo das características convolucionais da imagem e utiliza RoI pooling para as regiões propostas. | Ainda depende de propostas de regiões externas à rede. |
+| **Faster R-CNN** | Introduz a Region Proposal Network (RPN), que compartilha características com o detector. | A geração de propostas passa a ser aprendida por uma rede. |
+| **Mask R-CNN** | Estende Faster R-CNN com um ramo de predição de máscaras e utiliza RoIAlign. | Acrescenta segmentação de instâncias à detecção. |
 
-3. **Fully Convolutional Networks (FCN) for Segmentation:**
-   - FCNs replace fully connected layers with convolutional layers to enable pixel-wise classification in segmentation tasks. The hierarchical features from deeper layers help with the global context, while the finer details from shallower layers help with accurate pixel-level segmentation.
+Esses métodos são trabalhos distintos. A autoria de toda a família não deve ser atribuída somente a Ross Girshick; cada artigo tem sua própria equipe de autores.
 
-4. **U-Net:**
-   - **U-Net** is a popular architecture for semantic segmentation, particularly in medical imaging. It uses an encoder-decoder structure that captures high-level contextual information in the encoder and combines it with fine-grained details from the decoder, ensuring accurate segmentation.
-   
-5. **Mask R-CNN:**
-   - **Mask R-CNN** extends Faster R-CNN by adding a mask prediction head for instance segmentation. It creates a rich feature hierarchy to not only detect objects but also predict pixel-level masks, making it capable of handling instance segmentation (i.e., distinguishing different objects of the same class).
+## Roteiro de leitura
 
-### Benefits of Rich Feature Hierarchies
+1. Ler o artigo de R-CNN e identificar o papel das propostas de regiões e da CNN.
+2. Comparar o compartilhamento de características no Fast R-CNN.
+3. Estudar como a RPN modifica a geração de propostas no Faster R-CNN.
+4. Examinar a predição de máscaras e o RoIAlign no Mask R-CNN.
 
-- **Improved accuracy:** By capturing both global context and local details, rich feature hierarchies lead to better object detection and segmentation results.
-- **Multiscale information:** Objects may appear in different sizes or orientations, and a hierarchy helps to detect them at different scales.
-- **Contextual understanding:** For tasks like semantic segmentation, understanding the context of surrounding pixels (e.g., knowing that a road is often next to a car) leads to more accurate labeling.
-  
-### Practical Tips for Building Rich Feature Hierarchies
+## Referências e atribuição
 
-- **Deep architectures**: Use deep neural networks that can learn complex feature hierarchies, like ResNet, DenseNet, or VGG, which have been proven effective in capturing rich features.
-- **Skip connections**: Networks like U-Net and ResNet use skip connections to pass information between layers at different levels of abstraction. These help preserve fine details while leveraging the global context.
-- **Multi-scale input**: In some cases, preprocessing the image at multiple scales and feeding it into the model can help the network learn more robust multi-scale features.
-  
-### Conclusion
+1. **Girshick, R.; Donahue, J.; Darrell, T.; Malik, J.** *Rich feature hierarchies for accurate object detection and semantic segmentation*. CVPR, 2014. Preprint disponibilizado em 2013. [Artigo original — arXiv:1311.2524](https://arxiv.org/abs/1311.2524).
+2. **Girshick, R.** *Fast R-CNN*. ICCV, 2015. [Artigo original — arXiv:1504.08083](https://arxiv.org/abs/1504.08083).
+3. **Ren, S.; He, K.; Girshick, R.; Sun, J.** *Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks*. NeurIPS, 2015. [Artigo original — arXiv:1506.01497](https://arxiv.org/abs/1506.01497).
+4. **He, K.; Gkioxari, G.; Dollár, P.; Girshick, R.** *Mask R-CNN*. ICCV, 2017. [Artigo original — arXiv:1703.06870](https://arxiv.org/abs/1703.06870).
 
-Using rich feature hierarchies allows a model to understand both the fine details and broader context in an image, making it an essential concept in modern object detection and semantic segmentation. Approaches that leverage deep neural networks with hierarchical feature learning have become the backbone of state-of-the-art methods in these fields. If you're working with image analysis tasks, consider architectures like Faster R-CNN, Mask R-CNN, U-Net, or FCN to take advantage of rich feature hierarchies for improved performance.
+As explicações acima são sínteses para estudo e não substituem a leitura dos artigos. A organização destas notas não implica autoria dos algoritmos, vínculo com os autores ou reprodução experimental dos resultados.
+
+## Possíveis próximos passos
+
+- Adicionar um exemplo didático com uma implementação de biblioteca, citando sua origem e licença.
+- Documentar ambiente, dados públicos utilizados e instruções de execução.
+- Registrar resultados somente após executar e avaliar os experimentos.
+
+Esses itens são propostas de continuidade e ainda não estão implementados.
